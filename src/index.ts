@@ -86,6 +86,7 @@ function mines() {
     console.log("click!", button);
 
     if (button == 0) {
+      if (board[cellY][cellX].isFlagged) return;
       if (board[cellY][cellX].isMine) alert("YOU LOSE LOSE LOSER");
       else if (
         !board[cellY][cellX].isCleared &&
@@ -93,26 +94,6 @@ function mines() {
       ) {
         board[cellY][cellX].isCleared = true;
         cleared += 1;
-
-        if (board[cellY][cellX].neighborCount == 0) {
-          for (let i = 0; i < mask.length; i++) {
-            for (let j = 0; j < mask[i].length; j++) {
-              let x = i - 1;
-              let y = j - 1;
-
-              if (cellY + x >= 0 && cellY + x < rows) {
-                if (cellX + y >= 0 && cellX + y < cols) {
-                  if (mask[i][j]) {
-                    if (board[cellY + x][cellX + y].neighborCount == 0) {
-                      board[cellY + x][cellX + y].isCleared = true;
-                      cleared += 1;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
       }
     } else if (button == 2) {
       if (!board[cellY][cellX].isCleared) {

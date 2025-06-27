@@ -4,7 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc index.ts --target esnext",
+    "dev": "tsc",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,6 +19,8 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "typescript": "^5.8.3"
+    "gts": "^6.0.2",
+    "typescript": "^5.8.3",
+    "@types/node": "^22.7.5"
   }
 }
