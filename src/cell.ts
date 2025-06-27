@@ -84,12 +84,27 @@ class Cell extends Renderable {
 
     if (this.isFlagged)
       this.ctx.fillText('F', x + Cell.SIZE / 2, y + Cell.SIZE / 2);
-    else if (this.isCleared && !this.isMine)
+    else if (this.isCleared && !this.isMine && this.adjacentMines != 0) {
+      if (this.adjacentMines === 1) this.ctx.fillStyle = 'blue';
+      else if (this.adjacentMines === 2) this.ctx.fillStyle = 'green';
+      else if (this.adjacentMines === 3) this.ctx.fillStyle = 'red';
+      else if (this.adjacentMines === 4) this.ctx.fillStyle = '#00007c';
+      else if (this.adjacentMines === 5) this.ctx.fillStyle = '#7c0001';
+      else if (this.adjacentMines === 6) this.ctx.fillStyle = '#007d7c';
+      else if (this.adjacentMines === 7) this.ctx.fillStyle = 'black';
+      else if (this.adjacentMines === 8) this.ctx.fillStyle = '#7c7c7c';
+
+      this.ctx.font = 'bold 16px sans-serif';
+
       this.ctx.fillText(
         `${this.adjacentMines}`,
-        x + Cell.SIZE / 2,
-        y + Cell.SIZE / 2,
+        x + Cell.SIZE / 2 - 4,
+        y + Cell.SIZE / 2 + 4,
       );
+    } else if (!this.isCleared) {
+      this.ctx.fillStyle = 'grey';
+      this.ctx.fillRect(x, y, Cell.SIZE, Cell.SIZE);
+    }
   }
 
   click(e: MouseEvent) {
