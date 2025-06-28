@@ -1,67 +1,37 @@
-import { request } from 'http';
 import Board from '../core/board.js';
-import Cell from '../core/cell.js';
-import { Status } from '../core/util.js';
 
-type BotStyle = 'random';
+abstract class Bot {
+  startTime: number;
+  endTime: number;
 
-class Bot {
-  style: BotStyle;
+  protected board: Board;
+  protected reset: HTMLButtonElement;
 
-  private board: Board;
-  private reset: HTMLButtonElement;
+  protected running = false;
 
-  private running = false;
-
-  constructor(board: Board, style: BotStyle) {
+  constructor(board: Board) {
     this.board = board;
-    this.style = style;
+
+    this.startTime = 0;
+    this.endTime = 0;
 
     this.reset = document.getElementById('reset') as HTMLButtonElement;
   }
 
   start() {
     this.running = true;
-
-    if (this.style == 'random') this.random();
+    this.startTime = performance.now();
+    this.solve();
   }
 
   stop() {
+    this.endTime = performance.now();
     this.running = false;
+
+    alert(`Bot ran for ${(this.endTime - this.startTime) / 1000} seconds`);
   }
 
-  random() {
-    let attempts = 0;
-
-    const turn = () => {
-      if (!this.running) return;
-      if (this.board.status == Status.WINNER) {
-        console.log(`Total Attempts: ${attempts}`);
-        return;
-      }
-
-      if (this.board.status == Status.GAME_OVER) {
-        this.board.reset();
-        console.log(`Attempt ${attempts}`);
-        attempts += 1;
-      } else {
-        const randomRow = Math.floor(Math.random() * this.board.height);
-        const randomCol = Math.floor(Math.random() * this.board.width);
-
-        this.board.click({
-          offsetX: randomCol * Cell.SIZE + Cell.SIZE / 2,
-          offsetY: randomRow * Cell.SIZE + Cell.SIZE / 2,
-          button: 0,
-        } as MouseEvent);
-      }
-
-      requestAnimationFrame(turn);
-      // setTimeout(() => {
-      // }, 0);
-    };
-
-    requestAnimationFrame(turn);
-  }
+  abstract solve(): void;
 }
 
 export default Bot;

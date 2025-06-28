@@ -131,6 +131,27 @@ class Board extends Renderable {
     }
 
     this.render();
+    this.updateTitle();
+  }
+
+  updateTitle() {
+    const title = document.getElementById('title');
+    if (!title) return;
+
+    switch (this.status) {
+      case Status.GAME_OVER:
+        title.textContent = 'Game Over';
+        break;
+      case Status.NEW_GAME:
+        title.textContent = 'New Game';
+        break;
+      case Status.IN_GAME:
+        title.textContent = 'In Game';
+        break;
+      case Status.WINNER:
+        title.textContent = 'Winner';
+        break;
+    }
   }
 }
 
