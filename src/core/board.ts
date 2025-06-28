@@ -39,7 +39,6 @@ class Board extends Renderable {
     }
 
     this.status = Status.NEW_GAME;
-    this.populate();
   }
 
   reset() {
