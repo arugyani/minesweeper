@@ -4,10 +4,6 @@ import { Status } from '../core/util.js';
 import Bot from './bot.js';
 
 class Random extends Bot {
-  constructor(board: Board) {
-    super(board);
-  }
-
   solve() {
     const turn = () => {
       if (!this.running) return;

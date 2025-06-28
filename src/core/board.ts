@@ -97,6 +97,8 @@ class Board extends Renderable {
         this.board[i][j].render();
       }
     }
+
+    this.updateTitle();
   }
 
   checkWin() {
@@ -131,7 +133,6 @@ class Board extends Renderable {
     }
 
     this.render();
-    this.updateTitle();
   }
 
   updateTitle() {

@@ -36,23 +36,23 @@ class Cell extends Renderable {
   }
 
   reveal() {
-    if (this.isCleared || this.isFlagged) return;
+    if (this.isFlagged) return;
     if (this.isMine) {
       this.board.status = Status.GAME_OVER;
-      return;
+    } else {
+      this.isCleared = true;
+
+      if (this.adjacentMines > 0) return;
+      this.clearNeighbors();
     }
-
-    this.isCleared = true;
-
-    if (this.adjacentMines > 0) return;
-    this.clearNeighbors();
   }
 
-  clearNeighbors() {
+  clearNeighbors(unsafe?: boolean) {
     this.iterateNeighbors((row, col) => {
       const cell = this.board.getCell(row, col);
 
-      if (cell.isMine || cell.isFlagged || cell.isCleared) return;
+      if (cell.isMine && !unsafe) return;
+      if (cell.isFlagged || cell.isCleared) return;
       else cell.reveal();
     });
   }
@@ -75,6 +75,19 @@ class Cell extends Renderable {
           callback(newRow, newCol);
         }
       }
+    }
+  }
+
+  chord() {
+    let flagged = 0;
+    this.iterateNeighbors((row, col) => {
+      const cell = this.board.getCell(row, col);
+
+      if (cell.isFlagged) flagged += 1;
+    });
+
+    if (flagged == this.adjacentMines) {
+      this.clearNeighbors(true);
     }
   }
 
@@ -121,10 +134,8 @@ class Cell extends Renderable {
 
     switch (button) {
       case 0: // Left Click
-        this.reveal();
-        break;
-      case 1: // Middle Click
-        // TODO: Handle middle click
+        if (this.isCleared) this.chord();
+        else this.reveal();
         break;
       case 2: // Right Click
         this.toggleFlag();

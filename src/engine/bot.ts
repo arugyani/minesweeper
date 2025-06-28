@@ -9,8 +9,9 @@ abstract class Bot {
 
   protected running = false;
 
-  constructor(board: Board) {
-    this.board = board;
+  constructor(canvas: HTMLCanvasElement) {
+    this.board = new Board(9, 9, 10, canvas);
+    this.board.render();
 
     this.startTime = 0;
     this.endTime = 0;
@@ -26,9 +27,15 @@ abstract class Bot {
 
   stop() {
     this.endTime = performance.now();
-    this.running = false;
 
-    alert(`Bot ran for ${(this.endTime - this.startTime) / 1000} seconds`);
+    if (this.running) {
+      console.log(
+        `Bot ran for ${(this.endTime - this.startTime) / 1000} seconds`,
+      );
+    }
+
+    this.board.reset();
+    this.running = false;
   }
 
   abstract solve(): void;
