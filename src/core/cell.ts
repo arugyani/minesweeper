@@ -1,10 +1,12 @@
 import Board from './board.js';
 import Renderable from './render.js';
+import { Status } from './util.js';
 
 class Cell extends Renderable {
   isMine: boolean = false;
   isCleared: boolean = false;
   isFlagged: boolean = false;
+
   adjacentMines: number = 0;
 
   row: number;
@@ -26,10 +28,17 @@ class Cell extends Renderable {
     this.board = board;
   }
 
+  reset() {
+    this.isMine = false;
+    this.isCleared = false;
+    this.isFlagged = false;
+    this.adjacentMines = 0;
+  }
+
   reveal() {
     if (this.isCleared || this.isFlagged) return;
     if (this.isMine) {
-      alert('GAME OVER');
+      this.board.status = Status.GAME_OVER;
       return;
     }
 
